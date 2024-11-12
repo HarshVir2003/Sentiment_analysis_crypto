@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Model</title>
+    <style>
+        /* Reset styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body styling */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f4f8;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Center container styling */
+        .container {
+            text-align: center;
+        }
+
+        /* Heading styling */
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Button styling */
+        .btn {
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        /* Button hover effect */
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Choose Model to Predict</h1>
+        <a href="{% url 'model' 1 %}"><button class="btn">Model 1</button></a>
+        <a href="{% url 'model' 2 %}"><button class="btn">Model 2</button></a>
+    </div>
+</body>
+</html>

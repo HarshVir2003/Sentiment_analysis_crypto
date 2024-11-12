@@ -7,4 +7,8 @@
     <orderEntry type="jdk" jdkName="Python 3.12 (Sentiment_analysis_crypto)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
+  <component name="PackageRequirementsSettings">
+    <option name="versionSpecifier" value="Don't specify version" />
+    <option name="modifyBaseFiles" value="true" />
+  </component>
 </module>

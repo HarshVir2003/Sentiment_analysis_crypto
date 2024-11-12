@@ -1,0 +1,4 @@
+Django
+tensorflow
+nltk
+keras

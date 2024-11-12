@@ -55,7 +55,7 @@ ROOT_URLCONF = "Sentiment_analysis_crypto.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [r'model_handling\templates\model_handling'],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
