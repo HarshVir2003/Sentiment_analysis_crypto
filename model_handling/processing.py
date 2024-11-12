@@ -1,3 +1,5 @@
+import pickle
+
 import keras.src.saving
 import numpy as np
 import pandas as pd
@@ -11,11 +13,12 @@ from nltk.stem.porter import *
 
 
 class CustomModel:
-    def __init__(self):
-        self.model = keras.models.load_model(os.path.join(settings.BASE_DIR, 'models', 'model1.keras'))
+    def __init__(self, model_path, tokenizer):
+        self.model = keras.models.load_model(model_path)
         self.max_words = 5000
         self.max_len = 50
-        self.tokenizer = self.train_tokenizer()
+        with open(tokenizer, 'rb') as f:
+            self.tokenizer = pickle.load(f)
 
     @staticmethod
     def tweet2words(data):
@@ -55,4 +58,5 @@ class CustomModel:
         return np.argmax(y_pred)
 
 
-model1 = CustomModel()
+model1 = CustomModel(os.path.join(settings.BASE_DIR, 'models', 'model1.keras'), os.path.join(settings.BASE_DIR, 'models', 'tokenizer.pkl'))
+model2 = CustomModel(os.path.join(settings.BASE_DIR, 'models', 'model1.keras'), os.path.join(settings.BASE_DIR, 'models', 'tokenizer.pkl'))

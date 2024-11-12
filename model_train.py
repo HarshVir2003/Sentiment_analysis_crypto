@@ -25,6 +25,8 @@ from tensorflow.keras import losses
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
+import pickle
+
 df0 = pd.read_csv(r'D:\Projects\Project_sentiment_analysis\Bitcoin_tweets_dataset_2.csv', chunksize=100000,
                   lineterminator='\n')
 df = pd.concat(df0)
@@ -113,6 +115,9 @@ def tokenize_pad_sequences(text):
 print('Before Tokenization & Padding \n', df['cleantext2'][0])
 X, tokenizer = tokenize_pad_sequences(df['cleantext2'])
 print('After Tokenization & Padding \n', X[0])
+
+with open('tokenizer.pkl', 'wb') as f:
+    pickle.dump(tokenizer, f, pickle.HIGHEST_PROTOCOL)
 
 y = pd.get_dummies(df['class'])
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1)
