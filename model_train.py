@@ -1,5 +1,8 @@
 import pandas as pd
 import os
+
+from tensorflow.keras.layers import SpatialDropout1D
+from tensorflow.keras.layers import GRU
 from tqdm import tqdm
 
 # For Preprocessing
@@ -26,8 +29,9 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 import pickle
+from Sentiment_analysis_crypto import settings
 
-df0 = pd.read_csv(r'D:\Projects\Project_sentiment_analysis\Bitcoin_tweets_dataset_2.csv', chunksize=100000,
+df0 = pd.read_csv(os.path.join(settings.BASE_DIR.parent, 'Bitcoin_tweets_dataset_2.csv'), chunksize=100000,
                   lineterminator='\n')
 df = pd.concat(df0)
 
@@ -154,11 +158,29 @@ from tensorflow.keras.optimizers import SGD
 sgd = SGD(0.1, momentum=momentum, decay=decay_rate, nesterov=False)
 # Build model
 model = Sequential()
+# Embedding layer to convert word indices to dense embeddings
 model.add(Embedding(vocab_size, embedding_size, input_length=max_len))
-model.add(Conv1D(filters=32, kernel_size=1, padding='same', activation='relu'))
+# Adding SpatialDropout1D to make the model more robust against overfitting by randomly setting a fraction of the input units to zero at each update
+model.add(SpatialDropout1D(0.2))
+
+# Convolutional Block 1
+model.add(Conv1D(filters=64, kernel_size=3, padding='same', activation='relu'))
 model.add(MaxPooling1D(pool_size=2))
-model.add(Bidirectional(LSTM(32)))
-model.add(Dropout(0.4))
+
+# Convolutional Block 2 - additional Conv1D for feature extraction
+model.add(Conv1D(filters=128, kernel_size=3, padding='same', activation='relu'))
+model.add(MaxPooling1D(pool_size=2))
+
+# Bidirectional Recurrent Block with LSTM followed by GRU for capturing sequential dependencies
+model.add(Bidirectional(LSTM(64, return_sequences=True)))
+model.add(Bidirectional(GRU(64)))
+
+# Dropout layer to further prevent overfitting
+model.add(Dropout(0.5))
+
+# Dense layer for final output classification with a softmax activation
+model.add(Dense(128, activation='relu'))
+model.add(Dense(64, activation='relu'))
 model.add(Dense(3, activation='softmax'))
 
 model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy', Precision(), Recall()])
@@ -166,5 +188,5 @@ model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy
 history = model.fit(X_train, y_train, validation_data=(X_val, y_val), batch_size=64, epochs=epochs, verbose=1)
 
 # model.save(r'\models\model1')
-model.save(r'model1.h5')
-model.save(r'model1.keras')
+model.save(r'model2.h5')
+model.save(r'model2.keras')
