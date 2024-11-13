@@ -10,6 +10,9 @@ from Sentiment_analysis_crypto import settings
 import os
 from nltk.corpus import stopwords
 from nltk.stem.porter import *
+import nltk
+nltk.download('stopwords')
+nltk.download('vader_lexicon')
 
 
 class CustomModel:
